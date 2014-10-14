@@ -1,3 +1,4 @@
+
 #!/bin/bash
 #if [ "$(id -u)" != "0" ]; then
 #   echo "This script must be run like: sudo ./install.sh" 1>&2
@@ -64,6 +65,20 @@ if [ $(echo $VERSION '<' "8.7" | bc -l) == 1 ]; then
 cd /home/pi/pimame/emulators/gpsp
 ln -s /home/pi/pimame/roms/gba/gba_bios.bin gba_bios.bin
 fi
+
+if [ $(echo $VERSION '<' "9" | bc -l) == 1 ]; then #START 9
+#8.8 / 8.0 beta 6
+echo "Updating to 0.8 Beta 7"
+sudo apt-get update
+sudo apt-get install gunicorn
+
+if grep --quiet pimame-web-frontend /home/pi/.profile; then
+        sed -i "s|sudo python /home/pi/pimame/pimame-web-frontend/app.py|cd /home/pi/pimame/pimame-web-frontend/; sudo gunicorn app:app -b 0.0.0.0:80|g" /home/pi/.profile
+else
+  echo "Did not change web frontend."
+fi
+
+fi #end 9
+
+
 echo "You are now updated. Please restart to activate PiMAME :)"
-
-
