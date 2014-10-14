@@ -8,7 +8,7 @@ echo "Starting Install..."
 
 
 sudo apt-get update
-sudo apt-get -y install vsftpd xboxdrv stella python-pip python-requests python-levenshtein libsdl1.2-dev
+sudo apt-get -y install vsftpd xboxdrv stella python-pip python-requests python-levenshtein libsdl1.2-dev bc gunicorn
 git clone https://github.com/ssilverm/pimame-8 pimame
 cd pimame
 git submodule init
@@ -217,7 +217,7 @@ echo 'if [ "$DISPLAY" == "" ] && [ "$SSH_CLIENT" == "" ] && [ "$SSH_TTY" == "" ]
 if grep --quiet /home/pi/pimame/pimame-web-frontend /home/pi/.profile; then
   echo "website already exists, ignoring."
 else
-	echo 'sudo python /home/pi/pimame/pimame-web-frontend/app.py &' >> /home/pi/.profile
+	echo 'cd /home/pi/pimame/pimame-web-frontend/; sudo gunicorn app:app -b 0.0.0.0:80 &' >> /home/pi/.profile
 fi
 
 
